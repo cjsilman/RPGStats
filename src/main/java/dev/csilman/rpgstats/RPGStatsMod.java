@@ -1,5 +1,7 @@
 package dev.csilman.rpgstats;
 
+import dev.csilman.rpgstats.attributes.ModAttributes;
+import dev.csilman.rpgstats.dataattachment.ModData;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -30,6 +32,9 @@ public class RPGStatsMod {
     public RPGStatsMod(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+
+        ModAttributes.register(modEventBus);
+        ModData.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
