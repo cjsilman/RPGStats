@@ -11,6 +11,9 @@ import java.util.Objects;
 public class RPGStatsHandler {
 
     public static void applyStats(Player player) {
+        // Needs to be called whenever a player's RPGStats gets updated.
+        // This is what applies all the changes to the attributes.
+
         RPGStats stats = player.getData(ModData.RPG_STATS);
 
         // Intellij suggested requiring non-null, but I am pretty sure getData will just set the default values lol

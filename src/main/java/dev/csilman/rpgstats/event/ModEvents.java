@@ -2,6 +2,7 @@ package dev.csilman.rpgstats.event;
 
 import dev.csilman.rpgstats.RPGStatsMod;
 import dev.csilman.rpgstats.attributes.ModAttributes;
+import dev.csilman.rpgstats.command.SetRPGStatCommand;
 import dev.csilman.rpgstats.util.RPGStatsHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
@@ -9,13 +10,22 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.server.command.ConfigCommand;
 
 import java.util.ArrayList;
 
 @EventBusSubscriber(modid = RPGStatsMod.MOD_ID)
 public class ModEvents {
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        new SetRPGStatCommand(event.getDispatcher());
+
+        ConfigCommand.register(event.getDispatcher());
+    }
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeModificationEvent event) {
