@@ -1,0 +1,16 @@
+{
+  "attributes.rpgstats.strength": "RPGStat Strength",
+  "attributes.rpgstats.constitution": "RPGStat Constitution",
+  "attributes.rpgstats.dexterity": "RPGStat Dexerity",
+  "attributes.rpgstats.wisdom": "RPGStat Wisdom",
+  "attributes.rpgstats.intelligence": "RPGStat Intelligence",
+  "attributes.rpgstats.charisma": "RPGStat Charisma",
+
+  "rpgstats.configuration.title": "Example Mod Configs",
+  "rpgstats.configuration.section.examplemod.common.toml": "Example Mod Configs",
+  "rpgstats.configuration.section.examplemod.common.toml.title": "Example Mod Configs",
+  "rpgstats.configuration.items": "Item List",
+  "rpgstats.configuration.logDirtBlock": "Log Dirt Block",
+  "rpgstats.configuration.magicNumberIntroduction": "Magic Number Text",
+  "rpgstats.configuration.magicNumber": "Magic Number"
+}

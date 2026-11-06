@@ -20,13 +20,15 @@ import net.neoforged.neoforge.server.command.EnumArgument;
 public class SetRPGStatCommand {
 
     public SetRPGStatCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal(RPGStatsMod.MOD_ID)
-                .then(Commands.argument("target", EntityArgument.player())
-                        .then(Commands.literal("set")
-                                .then(Commands.literal("base")
-                                        .then(Commands.argument("stat", EnumArgument.enumArgument(RPGStatsEnum.class))
-                                                .then(Commands.argument("value", IntegerArgumentType.integer(1))
-                                                        .executes(this::execute)))))));
+        dispatcher.register(
+                Commands.literal(RPGStatsMod.MOD_ID)
+                        .requires(commandSourceStack -> commandSourceStack.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                            .then(Commands.literal("set")
+                                    .then(Commands.literal("base")
+                                            .then(Commands.argument("stat", EnumArgument.enumArgument(RPGStatsEnum.class))
+                                                    .then(Commands.argument("value", IntegerArgumentType.integer(1))
+                                                            .then(Commands.argument("target", EntityArgument.player())
+                                                                    .executes(this::execute)))))));
     }
 
     private int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

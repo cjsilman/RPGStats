@@ -2,6 +2,7 @@ package dev.csilman.rpgstats.event;
 
 import dev.csilman.rpgstats.RPGStatsMod;
 import dev.csilman.rpgstats.attributes.ModAttributes;
+import dev.csilman.rpgstats.command.DebugPrintRPGStatCommandServer;
 import dev.csilman.rpgstats.command.SetRPGStatCommand;
 import dev.csilman.rpgstats.util.RPGStatsHandler;
 import net.minecraft.core.Holder;
@@ -23,6 +24,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
         new SetRPGStatCommand(event.getDispatcher());
+        new DebugPrintRPGStatCommandServer(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
@@ -53,6 +55,13 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void setPlayerStatsOnSpawn(PlayerEvent.PlayerLoggedInEvent event) {
+        // Only Server Side
+        Player player = event.getEntity();
+        RPGStatsHandler.applyStats(player);
+    }
+
+    @SubscribeEvent
+    public static void reapplyRPGStatEffectsOnRespawn(PlayerEvent.PlayerRespawnEvent event) {
         // Only Server Side
         Player player = event.getEntity();
         RPGStatsHandler.applyStats(player);

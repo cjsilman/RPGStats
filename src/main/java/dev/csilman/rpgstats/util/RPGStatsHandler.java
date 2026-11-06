@@ -4,16 +4,26 @@ import dev.csilman.rpgstats.RPGStatsMod;
 import dev.csilman.rpgstats.attributes.ModAttributes;
 import dev.csilman.rpgstats.dataattachment.ModData;
 import dev.csilman.rpgstats.dataattachment.RPGStats;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Objects;
 
 public class RPGStatsHandler {
 
+    private static final ResourceLocation STR_MOD_ID = ResourceLocation.fromNamespaceAndPath(RPGStatsMod.MOD_ID, "str_mod_id");
+    private static final ResourceLocation CON_MOD_ID = ResourceLocation.fromNamespaceAndPath(RPGStatsMod.MOD_ID, "con_mod_id");
+    private static final ResourceLocation DEX_MOD_ID = ResourceLocation.fromNamespaceAndPath(RPGStatsMod.MOD_ID, "dex_mod_id");
+    private static final ResourceLocation WIS_MOD_ID = ResourceLocation.fromNamespaceAndPath(RPGStatsMod.MOD_ID, "wis_mod_id");
+    private static final ResourceLocation INT_MOD_ID = ResourceLocation.fromNamespaceAndPath(RPGStatsMod.MOD_ID, "int_mod_id");
+    private static final ResourceLocation CHA_MOD_ID = ResourceLocation.fromNamespaceAndPath(RPGStatsMod.MOD_ID, "cha_mod_id");
+
     public static void applyStats(Player player) {
         // Needs to be called whenever a player's RPGStats gets updated.
         // This is what applies all the changes to the attributes.
-
         RPGStats stats = player.getData(ModData.RPG_STATS);
 
         // Intellij suggested requiring non-null, but I am pretty sure getData will just set the default values lol
@@ -52,5 +62,21 @@ public class RPGStatsHandler {
 
     private static void refreshStatEffects(Player player) {
         // Update attributes based on RPGStat attributes
+        // The attributes are such that equipment that increases your RPGState attribute will affect modifiers
+        AttributeMap attributes = player.getAttributes();
+
+        // Strength
+        double strength = attributes.getValue(ModAttributes.STRENGTH);
+        double strengthMod = Math.floor((strength)/2.0d)+((0.25d*(strength-1))); // 1 attack damage every 2 levels + 0.25 per level. Adjusted to be zero at level 1
+        AttributeModifier modifier = new AttributeModifier(
+            STR_MOD_ID, strengthMod, AttributeModifier.Operation.ADD_VALUE
+        );
+
+        Objects.requireNonNull(attributes.getInstance(Attributes.ATTACK_DAMAGE)).addOrUpdateTransientModifier(modifier);
+
+        // Constitution
+
+
+
     }
 }
