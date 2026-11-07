@@ -28,9 +28,26 @@ public class Config {
             .comment("A list of items to log on common setup.")
             .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), () -> "", Config::validateItemName);
 
+    public static final ModConfigSpec.IntValue MAX_LEVEL = BUILDER
+            .comment("Defines the maximum achievable player level")
+            .defineInRange("maxLevel", 60, 1, Integer.MAX_VALUE);
+
+    public static final ModConfigSpec.ConfigValue<List<? extends Integer>> MILESTONE_LEVELS = BUILDER
+            .comment("A list of each level a milestone point will be obtained. (e.g. [3, 5, 6])")
+            .defineListAllowEmpty("milestone_levels", List.of(3, 5, 6), Config::validateMilestoneAttribute);
+
+    public static final ModConfigSpec.DoubleValue BLOCK_BREAK_XP_MOD = BUILDER
+            .comment("Determines how much experience is gained on a block break.")
+            .defineInRange("blockBreakModifier", 0.05, 0, 10);
+
     static final ModConfigSpec SPEC = BUILDER.build();
+
 
     private static boolean validateItemName(final Object obj) {
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
+    }
+
+    private static boolean validateMilestoneAttribute(final Object obj) {
+        return obj instanceof Integer;
     }
 }

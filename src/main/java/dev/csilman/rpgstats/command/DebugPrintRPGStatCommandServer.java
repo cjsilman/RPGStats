@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.csilman.rpgstats.RPGStatsMod;
 import dev.csilman.rpgstats.attributes.ModAttributes;
 import dev.csilman.rpgstats.dataattachment.ModData;
+import dev.csilman.rpgstats.dataattachment.RPGLeveling;
 import dev.csilman.rpgstats.dataattachment.RPGStats;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -28,10 +29,11 @@ public class DebugPrintRPGStatCommandServer {
     private int execute(CommandContext<CommandSourceStack> commandSourceStackCommandContext) throws CommandSyntaxException {
         ServerPlayer player = commandSourceStackCommandContext.getSource().getPlayerOrException();
         RPGStats stats = player.getData(ModData.RPG_STATS);
+        RPGLeveling leveling = player.getData(ModData.RPG_LEVELING);
         double strengthAttribute = player.getAttributeValue(ModAttributes.STRENGTH);
 
         commandSourceStackCommandContext.getSource().sendSuccess(
-                () -> Component.literal("[SERVER] RPG Stats = " + stats + " | STR attribute = " + strengthAttribute),
+                () -> Component.literal("[SERVER] RPG Stats = " + stats + " | Leveling = " + leveling  + " | STR attribute = " + strengthAttribute),
                 true
         );
 

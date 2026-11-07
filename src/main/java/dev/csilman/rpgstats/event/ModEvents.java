@@ -1,9 +1,11 @@
 package dev.csilman.rpgstats.event;
 
+import dev.csilman.rpgstats.Config;
 import dev.csilman.rpgstats.RPGStatsMod;
 import dev.csilman.rpgstats.attributes.ModAttributes;
 import dev.csilman.rpgstats.command.DebugPrintRPGStatCommandServer;
 import dev.csilman.rpgstats.command.SetRPGStatCommand;
+import dev.csilman.rpgstats.util.RPGLevelingHandler;
 import dev.csilman.rpgstats.util.RPGStatsHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
@@ -14,6 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.server.command.ConfigCommand;
 
 import java.util.ArrayList;
@@ -54,6 +57,11 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        RPGLevelingHandler.addRPGLevelingXP(event.getPlayer(), 12*Config.BLOCK_BREAK_XP_MOD.get());
+    }
+
+    @SubscribeEvent
     public static void setPlayerStatsOnSpawn(PlayerEvent.PlayerLoggedInEvent event) {
         // Only Server Side
         Player player = event.getEntity();
@@ -61,7 +69,21 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void reapplyRPGStatEffectsOnRespawn(PlayerEvent.PlayerRespawnEvent event) {
+    public static void setPlayerStatsOnDimensionChange(final PlayerEvent.PlayerChangedDimensionEvent event) {
+        // Only Server Side
+        Player player = event.getEntity();
+        RPGStatsHandler.applyStats(player);
+    }
+
+    @SubscribeEvent
+    public static void setPlayerStatsOnClone(final PlayerEvent.Clone event) {
+        // Only Server Side
+        Player player = event.getEntity();
+        RPGStatsHandler.applyStats(player);
+    }
+
+    @SubscribeEvent
+    public static void setPlayerStatsOnRespawn(final PlayerEvent.PlayerRespawnEvent event) {
         // Only Server Side
         Player player = event.getEntity();
         RPGStatsHandler.applyStats(player);
