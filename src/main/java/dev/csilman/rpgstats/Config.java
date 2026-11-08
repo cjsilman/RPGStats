@@ -36,12 +36,49 @@ public class Config {
             .comment("A list of each level a milestone point will be obtained. (e.g. [3, 5, 6])")
             .defineListAllowEmpty("milestone_levels", List.of(3, 5, 6), Config::validateMilestoneAttribute);
 
+    public static final ModConfigSpec.DoubleValue BASE_XP_COST = BUILDER
+            .comment("-----------------------------------------------------------\n" +
+                    " EXPERIENCE AND MODIFIERS\n" +
+                    "-----------------------------------------------------------\n" +
+                    "Determines the base cost for RPGLevel experience, all scenario modifiers rely on this value as their multiple.\n" +
+                    "e.g. if you have 0.25 as your blockBreakXPModifier, you will gain baseXPValue*blockBreakXPModifier every time you break a block")
+            .defineInRange("baseXPValue", 1, 0, Double.MAX_VALUE);
+
     public static final ModConfigSpec.DoubleValue BLOCK_BREAK_XP_MOD = BUILDER
-            .comment("Determines how much experience is gained on a block break.")
-            .defineInRange("blockBreakModifier", 0.05, 0, 10);
+            .comment("Determines how much experience is gained on a block break.\n")
+            .defineInRange("blockBreakXPModifier", 0.01, 0, 100);
+
+    public static final ModConfigSpec.DoubleValue BLOCK_PLACE_XP_MOD = BUILDER
+            .comment("Determines how much experience is gained on a block place.\n")
+            .defineInRange("blockPlaceXPModifier", 0.01, 0, 100);
+
+    public static final ModConfigSpec.DoubleValue REGULAR_XP_MOD = BUILDER
+            .comment("Determines how much RPGLevel experience is gained on Minecraft XP gain.\n" +
+                    "This works different than the typical base XP gain in the examples above. " +
+                    "RPGLevel experience is gained based on Minecraft xp value * modifier")
+            .defineInRange("blockBreakXPModifier", 0.01, 0, 100);
+
+    public static final ModConfigSpec.DoubleValue ENTITY_KILL_MOD = BUILDER
+            .comment("Determines how much experience is gained on entity kill")
+            .defineInRange("entityKillModifier", 1.0d, 0.0d, 100.0d);
+
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> ENTITY_KILL_BLOCKLIST = BUILDER
+            .comment("List of entities that should NOT give experience. Takes precedence over boss whitelist")
+            .defineListAllowEmpty("entityKillBlocklist", List.of("minecraft:horse"), () -> "", Config::validateEntityName);
+
+    public static final ModConfigSpec.DoubleValue BOSS_ENTITY_KILL_MOD = BUILDER
+            .comment("Determines how much experience is gained on boss entity kill")
+            .defineInRange("bossEntityKillModifier", 0.0d, 5.0d, 100.0d);
+
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> BOSS_KILL_WHITELIST = BUILDER
+            .comment("List of boss entities affected by boss modifier")
+            .defineListAllowEmpty("bossKillWhitelist", List.of("minecraft:ender_dragon", "minecraft:wither"), () -> "", Config::validateEntityName);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 
+    private static boolean validateEntityName(final Object obj) {
+        return obj instanceof String entityName && BuiltInRegistries.ENTITY_TYPE.containsKey(ResourceLocation.parse(entityName));
+    }
 
     private static boolean validateItemName(final Object obj) {
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));

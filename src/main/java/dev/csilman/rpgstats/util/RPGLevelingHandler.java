@@ -3,15 +3,31 @@ package dev.csilman.rpgstats.util;
 import dev.csilman.rpgstats.Config;
 import dev.csilman.rpgstats.dataattachment.ModData;
 import dev.csilman.rpgstats.dataattachment.RPGLeveling;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 public class RPGLevelingHandler {
 
     public static void addRPGLevelingXP(Player player, double value) {
+        // Skip creative
+        if (player.isCreative()) {
+            //return;
+        }
+
         // Level increase
         RPGLeveling playerLevelData = player.getData(ModData.RPG_LEVELING);
         double playerNewXPValue = playerLevelData.xp() + value;
         int playerLevel = playerLevelData.level();
+
+        player.sendSystemMessage(Component.literal(String.format(
+                "%s gained %s XP (%f -> %f). %f/%f. Level: %d",
+                player.getName().getString(),
+                value,
+                playerLevelData.xp(),
+                playerNewXPValue,
+                playerNewXPValue,
+                determineXPForNextLevel(playerLevel),
+                playerLevel)));
 
         if (availableForLevelUp(playerLevelData, playerNewXPValue))
         {
