@@ -76,7 +76,7 @@ public class ModEvents {
 
             if (event.getSource().getEntity() instanceof Player player) {
                 // TODO: Add AABB allowing other nearby players to gain experience. Only for bosses
-                if (Config.BOSS_KILL_WHITELIST.get().contains(killedEntity.toString())) {
+                if (Config.BOSS_KILL_WHITELIST.get().contains(entityID)) {
                     RPGLevelingHandler.addRPGLevelingXP(player, Config.BASE_XP_COST.get() * Config.BOSS_ENTITY_KILL_MOD.get());
                 } else {
                     RPGLevelingHandler.addRPGLevelingXP(player, Config.BASE_XP_COST.get() * Config.ENTITY_KILL_MOD.get());

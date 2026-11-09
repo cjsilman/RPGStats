@@ -46,17 +46,17 @@ public class Config {
 
     public static final ModConfigSpec.DoubleValue BLOCK_BREAK_XP_MOD = BUILDER
             .comment("Determines how much experience is gained on a block break.\n")
-            .defineInRange("blockBreakXPModifier", 0.01, 0, 100);
+            .defineInRange("breakBlockXPModifier", 0.01, 0, 100);
 
     public static final ModConfigSpec.DoubleValue BLOCK_PLACE_XP_MOD = BUILDER
             .comment("Determines how much experience is gained on a block place.\n")
-            .defineInRange("blockPlaceXPModifier", 0.01, 0, 100);
+            .defineInRange("placeBlockXPModifier", 0.01, 0, 100);
 
     public static final ModConfigSpec.DoubleValue REGULAR_XP_MOD = BUILDER
             .comment("Determines how much RPGLevel experience is gained on Minecraft XP gain.\n" +
                     "This works different than the typical base XP gain in the examples above. " +
                     "RPGLevel experience is gained based on Minecraft xp value * modifier")
-            .defineInRange("blockBreakXPModifier", 0.01, 0, 100);
+            .defineInRange("regularXPGainModifier", 0.01, 0, 100);
 
     public static final ModConfigSpec.DoubleValue ENTITY_KILL_MOD = BUILDER
             .comment("Determines how much experience is gained on entity kill")
@@ -64,7 +64,13 @@ public class Config {
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ENTITY_KILL_BLOCKLIST = BUILDER
             .comment("List of entities that should NOT give experience. Takes precedence over boss whitelist")
-            .defineListAllowEmpty("entityKillBlocklist", List.of("minecraft:horse"), () -> "", Config::validateEntityName);
+            .defineListAllowEmpty("entityKillBlocklist",
+                    List.of("minecraft:horse", "minecraft:donkey", "minecraft:dolphin", "minecraft:chicken",
+                            "minecraft:pig", "minecraft:cow", "minecraft:sheep", "minecraft:turtle",
+                            "minecraft:villager", "minecraft:wandering_trader", "minecraft:snow_golem",
+                            "minecraft:iron_golem", "minecraft:mule", "minecraft:cat", "minecraft:sniffer",
+                            "minecraft:armadillo", "minecraft:axolotl"),
+                    () -> "", Config::validateEntityName);
 
     public static final ModConfigSpec.DoubleValue BOSS_ENTITY_KILL_MOD = BUILDER
             .comment("Determines how much experience is gained on boss entity kill")
