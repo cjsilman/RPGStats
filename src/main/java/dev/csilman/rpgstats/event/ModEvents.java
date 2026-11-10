@@ -8,14 +8,18 @@ import dev.csilman.rpgstats.command.SetRPGStatCommand;
 import dev.csilman.rpgstats.util.RPGLevelingHandler;
 import dev.csilman.rpgstats.util.RPGStatsHandler;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.server.command.ConfigCommand;
 
@@ -57,8 +61,45 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        RPGLevelingHandler.addRPGLevelingXP(event.getPlayer(), 12*Config.BLOCK_BREAK_XP_MOD.get());
+    public static void earnXPOnEntityKill(LivingDeathEvent event) {
+        // Is Server Side and Client Side
+        LivingEntity killedEntity = event.getEntity();
+
+        if (!killedEntity.level().isClientSide()) {
+            // Only process event on server side
+            // Syncing to client will be covered elsewhere
+            String entityID = BuiltInRegistries.ENTITY_TYPE.getKey(killedEntity.getType()).toString();
+
+            if (Config.ENTITY_KILL_BLOCKLIST.get().contains(entityID)) {
+                return;
+            }
+
+            if (event.getSource().getEntity() instanceof Player player) {
+                // TODO: Add AABB allowing other nearby players to gain experience. Only for bosses
+                if (Config.BOSS_KILL_WHITELIST.get().contains(entityID)) {
+                    RPGLevelingHandler.addRPGLevelingXP(player, Config.BASE_XP_COST.get() * Config.BOSS_ENTITY_KILL_MOD.get());
+                } else {
+                    RPGLevelingHandler.addRPGLevelingXP(player, Config.BASE_XP_COST.get() * Config.ENTITY_KILL_MOD.get());
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void earnXPOnBlockBreak(BlockEvent.BreakEvent event) {
+        RPGLevelingHandler.addRPGLevelingXP(event.getPlayer(), Config.BASE_XP_COST.get()*Config.BLOCK_BREAK_XP_MOD.get());
+    }
+
+    @SubscribeEvent
+    public static void earnXPOnBlockPlace(BlockEvent.EntityPlaceEvent event) {
+        if (event.getEntity() instanceof Player) {
+            RPGLevelingHandler.addRPGLevelingXP((Player) event.getEntity(), Config.BASE_XP_COST.get()*Config.BLOCK_PLACE_XP_MOD.get());
+        }
+    }
+
+    @SubscribeEvent
+    public static void earnXPOnMinecraftXPGain(PlayerXpEvent.PickupXp event) {
+        RPGLevelingHandler.addRPGLevelingXP(event.getEntity(), Config.BASE_XP_COST.get()*Config.REGULAR_XP_MOD.get());
     }
 
     @SubscribeEvent

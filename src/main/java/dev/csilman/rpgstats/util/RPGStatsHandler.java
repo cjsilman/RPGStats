@@ -62,7 +62,7 @@ public class RPGStatsHandler {
 
     private static void refreshStatEffects(Player player) {
         // Update attributes based on RPGStat attributes
-        // The attributes are such that equipment that increases your RPGState attribute will affect modifiers
+        // The attributes are such that equipment that increases your RPGStat attribute will affect modifiers
         AttributeMap attributes = player.getAttributes();
 
         // Strength
