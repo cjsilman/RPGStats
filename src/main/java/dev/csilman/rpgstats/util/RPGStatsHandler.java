@@ -30,32 +30,32 @@ public class RPGStatsHandler {
         Objects.requireNonNull(
                 player.getAttribute(ModAttributes.STRENGTH),
                 String.format("[%s] Attempted to set player Strength attribute to null", RPGStatsMod.MOD_ID)
-        ).setBaseValue(stats.strength());
+        ).setBaseValue(stats.getRPGStat(RPGStatsEnum.Strength));
 
         Objects.requireNonNull(
                 player.getAttribute(ModAttributes.CONSTITUTION),
                 String.format("[%s] Attempted to set player Constitution attribute to null", RPGStatsMod.MOD_ID)
-        ).setBaseValue(stats.constitution());
+        ).setBaseValue(stats.getRPGStat(RPGStatsEnum.Constitution));
 
         Objects.requireNonNull(
                 player.getAttribute(ModAttributes.DEXTERITY),
                 String.format("[%s] Attempted to set player Dexterity attribute to null", RPGStatsMod.MOD_ID)
-        ).setBaseValue(stats.dexterity());
+        ).setBaseValue(stats.getRPGStat(RPGStatsEnum.Dexterity));
 
         Objects.requireNonNull(
                 player.getAttribute(ModAttributes.WISDOM),
                 String.format("[%s] Attempted to set player Wisdom attribute to null", RPGStatsMod.MOD_ID)
-        ).setBaseValue(stats.wisdom());
+        ).setBaseValue(stats.getRPGStat(RPGStatsEnum.Wisdom));
 
         Objects.requireNonNull(
                 player.getAttribute(ModAttributes.INTELLIGENCE),
                 String.format("[%s] Attempted to set player Intelligence attribute to null", RPGStatsMod.MOD_ID)
-        ).setBaseValue(stats.intelligence());
+        ).setBaseValue(stats.getRPGStat(RPGStatsEnum.Intelligence));
 
         Objects.requireNonNull(
                 player.getAttribute(ModAttributes.CHARISMA),
                 String.format("[%s] Attempted to set player Strength Charisma to null", RPGStatsMod.MOD_ID
-                )).setBaseValue(stats.charisma());
+                )).setBaseValue(stats.getRPGStat(RPGStatsEnum.Charisma));
 
         refreshStatEffects(player);
     }
