@@ -29,7 +29,7 @@ public class RPGLevelingHandler {
                 playerLevelData.level())));
 
         // Determine level increase
-        if (availableForLevelUp(playerLevelData.level(), playerLevelData.maxLevel(), playerNewXP))
+        if (availableForLevelUp(playerLevelData.level(), Config.MAX_LEVEL.get(), playerNewXP))
         {
             levelUpPlayer(player, playerLevelData.level()+1);
         } else {
@@ -37,7 +37,6 @@ public class RPGLevelingHandler {
             player.setData(ModData.RPG_LEVELING, new RPGLeveling(
                     playerNewXP,
                     playerLevelData.level(),
-                    playerLevelData.maxLevel(),
                     playerLevelData.attributePoints(),
                     playerLevelData.milestonePoints()
             ));
@@ -82,7 +81,7 @@ public class RPGLevelingHandler {
         }
 
         // Reset experience, add attribute/milestone points, maintain level
-        RPGLeveling newData = new RPGLeveling(0, targetLevel, Config.MAX_LEVEL.get(), currentAttributePoints+1, currentMilestonePoints);
+        RPGLeveling newData = new RPGLeveling(0, targetLevel, currentAttributePoints+1, currentMilestonePoints);
         player.setData(ModData.RPG_LEVELING, newData);
     }
 

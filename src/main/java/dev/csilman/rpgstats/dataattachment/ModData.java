@@ -23,7 +23,7 @@ public class ModData {
 
     public static final Supplier<AttachmentType<RPGLeveling>> RPG_LEVELING = ATTACHMENT_TYPES.register(
             "rpg_leveling",
-            () -> AttachmentType.builder(() -> new RPGLeveling(0.0d, 1, 80, 0, 0))
+            () -> AttachmentType.builder(() -> new RPGLeveling(0.0d, 1, 0, 0))
                     .serialize(RPGLeveling.CODEC)
                     .copyOnDeath()
                     .build()

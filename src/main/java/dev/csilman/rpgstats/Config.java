@@ -74,7 +74,7 @@ public class Config {
 
     public static final ModConfigSpec.DoubleValue BOSS_ENTITY_KILL_MOD = BUILDER
             .comment("Determines how much experience is gained on boss entity kill")
-            .defineInRange("bossEntityKillModifier", 0.0d, 5.0d, 100.0d);
+            .defineInRange("bossEntityKillModifier", 5.0d, 5.0d, 100.0d);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BOSS_KILL_WHITELIST = BUILDER
             .comment("List of boss entities affected by boss modifier")
