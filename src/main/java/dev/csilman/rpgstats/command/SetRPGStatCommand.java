@@ -39,7 +39,7 @@ public class SetRPGStatCommand {
         RPGStats currentStats = player.getData(ModData.RPG_STATS);
         int currentValue = currentStats.getRPGStat(statType);
 
-        player.setData(ModData.RPG_STATS, currentStats.setRPGStat(player, statType, value));
+        player.setData(ModData.RPG_STATS, currentStats.updateRPGStat(statType, value));
 
         player.sendSystemMessage(Component.literal(String.format("Set %s %s to %d (was %d)", player.getName().getString(), statType, value, currentValue)));
         RPGStatsHandler.applyStats(player);
