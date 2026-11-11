@@ -18,6 +18,10 @@ public record RPGStats(Map<RPGStatsEnum, Integer> stats) {
             RPGStatsEnum.Charisma, 1)
     );
 
+    public RPGStats() {
+        this(DEFAULT);
+    }
+
     public static final Codec<RPGStats> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.unboundedMap(RPGStatsEnum.CODEC, Codec.INT)

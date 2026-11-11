@@ -15,7 +15,7 @@ public class ModData {
 
     public static final Supplier<AttachmentType<RPGStats>> RPG_STATS = ATTACHMENT_TYPES.register(
             "rpg_stats",
-            () -> AttachmentType.builder(() -> new RPGStats(RPGStats.DEFAULT))
+            () -> AttachmentType.builder(() -> new RPGStats())
                     .serialize(RPGStats.CODEC)
                     .copyOnDeath()
                     .build()
