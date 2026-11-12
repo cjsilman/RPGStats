@@ -1,6 +1,7 @@
 package dev.csilman.rpgstats.dataattachment;
 
 import dev.csilman.rpgstats.RPGStatsMod;
+import dev.csilman.rpgstats.networking.RPGStatsSyncHandler;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -17,6 +18,7 @@ public class ModData {
             "rpg_stats",
             () -> AttachmentType.builder(() -> new RPGStats())
                     .serialize(RPGStats.CODEC)
+                    .sync(new RPGStatsSyncHandler())
                     .copyOnDeath()
                     .build()
     );

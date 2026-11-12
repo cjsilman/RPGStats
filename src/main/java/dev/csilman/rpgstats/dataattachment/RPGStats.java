@@ -3,6 +3,9 @@ package dev.csilman.rpgstats.dataattachment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.csilman.rpgstats.util.RPGStatsEnum;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -18,10 +21,6 @@ public record RPGStats(Map<RPGStatsEnum, Integer> stats) {
             RPGStatsEnum.Charisma, 1)
     );
 
-    public RPGStats() {
-        this(DEFAULT);
-    }
-
     public static final Codec<RPGStats> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.unboundedMap(RPGStatsEnum.CODEC, Codec.INT)
@@ -30,8 +29,16 @@ public record RPGStats(Map<RPGStatsEnum, Integer> stats) {
             ).apply(instance, RPGStats::new)
     );
 
-//    public static final Codec<RPGStats> CODEC = Codec.unboundedMap(RPGStatsEnum.CODEC, Codec.INT)
-//            .xmap(RPGStats::new, RPGStats::stats);
+    public static final StreamCodec<ByteBuf, Map<RPGStatsEnum, Integer>> STREAM_CODEC =
+    ByteBufCodecs.map(
+            size -> new EnumMap<>(RPGStatsEnum.class),
+            RPGStatsEnum.STREAM_CODEC,
+            ByteBufCodecs.INT
+    );
+
+    public RPGStats() {
+        this(DEFAULT);
+    }
 
     public int getRPGStat(RPGStatsEnum statType) {
         return stats.get(statType);
