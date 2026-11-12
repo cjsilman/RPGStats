@@ -7,24 +7,16 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
 public record RPGStats(Map<RPGStatsEnum, Integer> stats) {
 
-    public static final Map<RPGStatsEnum, Integer> DEFAULT = new EnumMap<>(Map.of(
-            RPGStatsEnum.Strength, 1,
-            RPGStatsEnum.Constitution, 1,
-            RPGStatsEnum.Dexterity, 1,
-            RPGStatsEnum.Wisdom, 1,
-            RPGStatsEnum.Intelligence, 1,
-            RPGStatsEnum.Charisma, 1)
-    );
-
     public static final Codec<RPGStats> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.unboundedMap(RPGStatsEnum.CODEC, Codec.INT)
-                            .optionalFieldOf("stats", DEFAULT)
+                            .optionalFieldOf("stats", Map.of())
                             .forGetter(RPGStats::stats)
             ).apply(instance, RPGStats::new)
     );
@@ -33,11 +25,20 @@ public record RPGStats(Map<RPGStatsEnum, Integer> stats) {
     ByteBufCodecs.map(
             size -> new EnumMap<>(RPGStatsEnum.class),
             RPGStatsEnum.STREAM_CODEC,
-            ByteBufCodecs.INT
+            ByteBufCodecs.VAR_INT
     );
 
+    public RPGStats {
+        EnumMap<RPGStatsEnum, Integer> defaultMap = new EnumMap<>(RPGStatsEnum.class);
+
+        for (RPGStatsEnum stat : RPGStatsEnum.values()) {
+            defaultMap.put(stat, stats.getOrDefault(stat, 1));
+        }
+        stats = Collections.unmodifiableMap(defaultMap);
+    }
+
     public RPGStats() {
-        this(DEFAULT);
+        this(Map.of());
     }
 
     public int getRPGStat(RPGStatsEnum statType) {

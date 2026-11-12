@@ -9,6 +9,7 @@ import dev.csilman.rpgstats.util.RPGLevelingHandler;
 import dev.csilman.rpgstats.util.RPGStatsHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -92,8 +93,8 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void earnXPOnBlockPlace(BlockEvent.EntityPlaceEvent event) {
-        if (event.getEntity() instanceof Player) {
-            RPGLevelingHandler.addRPGLevelingXP((Player) event.getEntity(), Config.BASE_XP_COST.get()*Config.BLOCK_PLACE_XP_MOD.get());
+        if (event.getEntity() instanceof ServerPlayer player) {
+            RPGLevelingHandler.addRPGLevelingXP(player, Config.BASE_XP_COST.get()*Config.BLOCK_PLACE_XP_MOD.get());
         }
     }
 
